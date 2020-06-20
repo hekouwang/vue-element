@@ -35,6 +35,17 @@ export function fetchList(data) {
   })
 }
 
+export function accountList(data) {
+  return request({
+    data,
+    url: '/account/listAccount',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',
