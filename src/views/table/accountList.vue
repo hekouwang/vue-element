@@ -1,17 +1,6 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-button class="filter-item" type="primary" @click="handleDownload">
-        {{ $t('核心账本') }}
-      </el-button>
-      <el-button class="filter-item" type="primary" @click="handleDownload">
-        {{ $t('下金蛋的鹅') }}
-      </el-button>
-      <el-button class="filter-item" type="primary" @click="handleDownload">
-        {{ $t('梦想存储罐') }}
-      </el-button>
-    </div>
-    <div class="filter-container">
       <el-select v-model="temp.consumeType" :placeholder="$t('table.importance')" clearable style="width: 90px"
                  class="filter-item">-->
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
@@ -45,12 +34,12 @@
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td><span style="font-size: 12px">总收入</span>&nbsp;<span style="color: red;font-size: 22px">{{ totalCount.totalIncome}}</span></td>
+          <td><span style="font-size: 12px">余额</span>&nbsp;<span style="color: red;font-size: 22px">{{ totalCount.totalIncome}}</span></td>
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td><span style="font-size: 12px">总支出</span>&nbsp;<span style="color: green;font-size: 22px">{{ totalCount.totalExpense }}</span></td>
+          <td><span style="font-size: 12px">流入</span>&nbsp;<span style="color: green;font-size: 22px">{{ totalCount.totalExpense }}</span></td>
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
           <td></td>
-          <td><span style="font-size: 12px">结余</span>&nbsp;<span style="font-size: 22px">{{ totalCount.toalRemain}}</span></td>
+          <td><span style="font-size: 12px">流出</span>&nbsp;<span style="font-size: 22px">{{ totalCount.toalRemain}}</span></td>
         </tr>
       </table>
     </div>

@@ -34,7 +34,13 @@ const tableRouter = {
       path: 'complex-table',
       component: () => import('@/views/table/complex-table'),
       name: 'ComplexTable',
-      meta: { title: 'complexTable' }
+      meta: { title: '流水列表' }
+    },
+    {
+      path: 'accountList',
+      component: () => import('@/views/table/accountList'),
+      name: 'AccountList',
+      meta: { title: '账户管理' }
     }
   ]
 }

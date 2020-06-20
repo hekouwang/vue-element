@@ -46,6 +46,17 @@ export function accountList(data) {
   })
 }
 
+export function classifyList(data) {
+  return request({
+    data,
+    url: '/classify/listClassify',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',
