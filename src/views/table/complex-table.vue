@@ -12,30 +12,55 @@
       </el-button>
     </div>
     <div class="filter-container">
-      <el-select v-model="temp.consumeType" :placeholder="$t('table.importance')" clearable style="width: 90px"
+      账本：
+      <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
                  class="filter-item">-->
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
       </el-select>
-      <el-select v-model="temp.consumeType" :placeholder="$t('table.importance')" clearable style="width: 90px"
+      分类：
+      <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
                  class="filter-item">-->
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
       </el-select>
-      <el-input v-model="listQuery.title" :placeholder="$t('table.title')" style="width: 200px;" class="filter-item"
-                @keyup.enter.native="handleFilter"/>
+      账户：
+      <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
+                 class="filter-item">-->
+        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
+      </el-select>
+      商家：
+      <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
+                 class="filter-item">-->
+        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
+      </el-select>
+      项目：
+      <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
+                 class="filter-item">-->
+        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
+      </el-select>
+      成员：
+      <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
+                 class="filter-item">-->
+        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
+      </el-select>
+        <span class="demonstration">时间范围：</span>
+        <el-date-picker
+          v-model="value2"
+          type="daterange"
+          align="right"
+          unlink-panels
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
-                 @click="handleCreate">
+    </div>
+    <div class="filter-container">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download"
-                 @click="handleDownload">
-        {{ $t('table.export') }}
-      </el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        {{ $t('table.reviewer') }}
-      </el-checkbox>
+
     </div>
     <div class="app-container">
       <table>
@@ -112,7 +137,7 @@
                 <el-table-column prop="targetAccountName" label="目标账户"></el-table-column>
                 <el-table-column prop="projectName" label="项目名"></el-table-column>
                 <el-table-column prop="remark" label="备注"></el-table-column>
-                <el-table-column prop="createTime" label="时间" min-width="100px"></el-table-column>
+                <el-table-column prop="createTime" label="时间" min-width="100px" ></el-table-column>
               </el-table>
             </template>
 
@@ -130,26 +155,26 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"
                style="width: 400px; margin-left:50px;">
         <el-form-item label="记账类型">
-          <el-select v-model="temp.consumeType" :placeholder="请选择记账类型" clearable style="width: 90px"
+          <el-select v-model="temp.consumeType" placeholder="请选择记账类型" clearable style="width: 90px"
                      class="filter-item">
             <el-option v-for="item in typeOptions" :key="item.key" :label="item.label" :value="item.value"/>
           </el-select>
         </el-form-item>
 
         <el-form-item label="分类" prop="classifyId">
-          <el-select v-model="temp.classifyId" :placeholder="请选择类别" clearable style="width: 200px"
+          <el-select v-model="temp.classifyId" placeholder="请选择类别" clearable style="width: 200px"
                      class="filter-item" >
             <el-option v-for="item in classifyList1" :key="item.id" :label="item.classifyName" :value="item.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="源账户" prop="sourceAccount">
-          <el-select v-model="temp.sourceAccount" :placeholder="请选择源账户" clearable style="width: 200px"
+          <el-select v-model="temp.sourceAccount" placeholder="请选择源账户" clearable style="width: 200px"
                      class="filter-item">
             <el-option v-for="item in accountList1" :key="item.accountName" :label="item.accountName" :value="item.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="目标账户" prop="targetAccount">
-          <el-select v-model="temp.targetAccount" :placeholder="请选择目标账户" clearable style="width: 200px"
+          <el-select v-model="temp.targetAccount" placeholder="请选择目标账户" clearable style="width: 200px"
                      class="filter-item">
 
             <el-option v-for="item in accountList1" :key="item.id" :label="item.accountName" :value="item.id"/>
@@ -262,7 +287,7 @@
         },
         listQuery: {
           page: 1,
-          limit: 20,
+          limit: 10,
           importance: undefined,
           title: undefined,
           type: undefined,
@@ -280,7 +305,7 @@
           classifyId: '',
           sourceAccount: '',
           targetAccount: '',
-          money: 0,
+          money: '',
           relationId: '',
           createTime: '',
           projectId: '',
@@ -370,7 +395,7 @@
         this.listLoading = true
         fetchList(this.test1).then(response => {
           this.list = response.data.items
-          this.total = 2
+          this.total = response.data.total
           this.totalCount=response.data.totalCount
 
           // Just to simulate the time of the request
@@ -383,7 +408,6 @@
         this.listLoading = true
         accountList(this.accountQuery).then(response1 => {
           this.accountList1 = response1.data
-          this.total = 2
 
           // Just to simulate the time of the request
           setTimeout(() => {
@@ -430,11 +454,11 @@
       },
       resetTemp() {
         this.temp = {
-          consumeType: 0,
+          consumeType: '',
           classifyId: '',
           sourceAccount: '',
           targetAccount: '',
-          money: 0,
+          money: '',
           relationId: '',
           createTime: '',
           projectId: '',
@@ -487,6 +511,7 @@
                 })
               })
             }
+            this.getList()
           }
         })
       },
