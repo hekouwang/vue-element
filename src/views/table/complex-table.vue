@@ -18,10 +18,13 @@
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
       </el-select>
       分类：
-      <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
-                 class="filter-item">-->
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
-      </el-select>
+      <div class="block">
+        <span class="demonstration">默认显示所有Tag</span>
+        <el-cascader
+          :options="options"
+          :props="props"
+          clearable></el-cascader>
+      </div>
       账户：
       <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
                  class="filter-item">-->
@@ -184,7 +187,11 @@
           <el-input v-model="temp.money"/>
         </el-form-item>
         <el-form-item label="成员" prop="relationId">
-          <el-input v-model="temp.relationId"/>
+          <el-select v-model="temp.relationId" placeholder="请选择成员" clearable style="width: 200px"
+                     class="filter-item">
+
+            <el-option v-for="item in relationList1" :key="item.id" :label="item.name" :value="item.id"/>
+          </el-select>
         </el-form-item>
         <el-form-item label-width="120px" label="选择时间" class="postInfo-container-item">
           <el-date-picker v-model="temp.createTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
@@ -231,7 +238,7 @@
     updateArticle,
     addOneExpand,
     tranferAccount,
-    addOneIncome, accountList, classifyList
+    addOneIncome, accountList, classifyList, relationList
   } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
@@ -275,11 +282,15 @@
         totalCount:null,
         accountList1:null,
         classifyList1:null,
+        relationList1:null,
         listLoading: true,
         accountQuery:{
 
         },
         classifyQuery:{
+
+        },
+        relationQuery:{
 
         },
         test1: {
@@ -326,7 +337,55 @@
           title: [{ required: true, message: 'title is required', trigger: 'blur' }]
         },
         downloadLoading: false,
-        expends: []
+        expends: [],
+        props: { multiple: true },
+        options: [{
+          value: 1,
+          label: '东南',
+          children: [{
+            value: 2,
+            label: '上海',
+            children: [
+              { value: 3, label: '普陀' },
+              { value: 4, label: '黄埔' },
+              { value: 5, label: '徐汇' }
+            ]
+          }, {
+            value: 7,
+            label: '江苏',
+            children: [
+              { value: 8, label: '南京' },
+              { value: 9, label: '苏州' },
+              { value: 10, label: '无锡' }
+            ]
+          }, {
+            value: 12,
+            label: '浙江',
+            children: [
+              { value: 13, label: '杭州' },
+              { value: 14, label: '宁波' },
+              { value: 15, label: '嘉兴' }
+            ]
+          }]
+        }, {
+          value: 17,
+          label: '西北',
+          children: [{
+            value: 18,
+            label: '陕西',
+            children: [
+              { value: 19, label: '西安' },
+              { value: 20, label: '延安' }
+            ]
+          }, {
+            value: 21,
+            label: '新疆维吾尔族自治区',
+            children: [
+              { value: 22, label: '乌鲁木齐' },
+              { value: 23, label: '克拉玛依' }
+            ]
+          }]
+        }]
       }
     },
     computed: {
@@ -353,6 +412,7 @@
       this.getList()
       this.getAccountList()
       this.getClassifyList()
+      this.getRelationList()
       this.temp.consumeType=this.typeOptions[0]
     },
     methods: {
@@ -419,6 +479,18 @@
         this.listLoading = true
         classifyList(this.classifyQuery).then(response1 => {
           this.classifyList1 = response1.data
+          this.total = 2
+
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
+      },
+      getRelationList() {
+        this.listLoading = true
+        relationList(this.relationQuery).then(response1 => {
+          this.relationList1 = response1.data
           this.total = 2
 
           // Just to simulate the time of the request
