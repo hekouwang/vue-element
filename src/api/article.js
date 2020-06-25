@@ -68,6 +68,28 @@ export function relationList(data) {
   })
 }
 
+export function merchantList(data) {
+  return request({
+    data,
+    url: '/merchant/listMerchant',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+
+export function classifyByGroup(data) {
+  return request({
+    data,
+    url: '/classify/listClassifyByGroup',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',

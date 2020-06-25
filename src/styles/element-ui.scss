@@ -10,6 +10,12 @@
     display: none !important;
   }
 }
+.el-cascader-menu {
+  height: 500px;
+}
+.el-cascader-menu__wrap{
+  height: 500px;
+}
 
 .el-upload__input {
   display: none;

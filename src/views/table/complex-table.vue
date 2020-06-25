@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
-      <el-button class="filter-item" type="primary" @click="handleDownload">
-        {{ $t('核心账本') }}
-      </el-button>
-      <el-button class="filter-item" type="primary" @click="handleDownload">
-        {{ $t('下金蛋的鹅') }}
-      </el-button>
-      <el-button class="filter-item" type="primary" @click="handleDownload">
-        {{ $t('梦想存储罐') }}
-      </el-button>
-    </div>
+<!--    <div class="filter-container">-->
+<!--      <el-button class="filter-item" type="primary" @click="handleDownload">-->
+<!--        {{ $t('核心账本') }}-->
+<!--      </el-button>-->
+<!--      <el-button class="filter-item" type="primary" @click="handleDownload">-->
+<!--        {{ $t('下金蛋的鹅') }}-->
+<!--      </el-button>-->
+<!--      <el-button class="filter-item" type="primary" @click="handleDownload">-->
+<!--        {{ $t('梦想存储罐') }}-->
+<!--      </el-button>-->
+<!--    </div>-->
     <div class="filter-container">
       账本：
       <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
@@ -18,13 +18,10 @@
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
       </el-select>
       分类：
-      <div class="block">
-        <span class="demonstration">默认显示所有Tag</span>
-        <el-cascader
-          :options="options"
+        <el-cascader v-model="consumeItemListQuery.classifyList" :show-all-levels="false"
+          :options="classifyOptions"
           :props="props"
           clearable></el-cascader>
-      </div>
       账户：
       <el-select v-model="temp.consumeType" placeholder="请选择" clearable style="width: 90px"
                  class="filter-item">-->
@@ -45,21 +42,20 @@
                  class="filter-item">-->
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
       </el-select>
-        <span class="demonstration">时间范围：</span>
-        <el-date-picker
-          v-model="value2"
-          type="daterange"
-          align="right"
-          unlink-panels
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        {{ $t('table.search') }}
-      </el-button>
     </div>
     <div class="filter-container">
+      <span class="demonstration">默认</span>
+      <el-date-picker
+        v-model="consumeItemListQuery.startAndEndTime"
+        value-format="yyyy-MM-dd"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期">
+      </el-date-picker>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter" id="text">
+        {{ $t('table.search') }}
+      </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
@@ -131,16 +127,17 @@
                 @sort-change="sortChange"
               >
                 <el-table-column prop="classifyName" label="分类"></el-table-column>
-                <el-table-column prop="consumeType" :formatter="formatterData" label="类型">
+                <el-table-column prop="consumeType" :formatter="formatterData" label="类型" min-width="60px">
 
                 </el-table-column>
-                <el-table-column prop="money" label="金额"></el-table-column>
+                <el-table-column prop="money" label="金额" min-width="60px"></el-table-column>
                 <el-table-column prop="sourceAccountName" label="源账户"></el-table-column>
                 <el-table-column prop="merchantName" label="商家"></el-table-column>
+                <el-table-column prop="merchantName" label="成员"></el-table-column>
                 <el-table-column prop="targetAccountName" label="目标账户"></el-table-column>
                 <el-table-column prop="projectName" label="项目名"></el-table-column>
                 <el-table-column prop="remark" label="备注"></el-table-column>
-                <el-table-column prop="createTime" label="时间" min-width="100px" ></el-table-column>
+                <el-table-column prop="createTime" label="时间" min-width="120px" ></el-table-column>
               </el-table>
             </template>
 
@@ -164,11 +161,12 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="分类" prop="classifyId">
-          <el-select v-model="temp.classifyId" placeholder="请选择类别" clearable style="width: 200px"
-                     class="filter-item" >
-            <el-option v-for="item in classifyList1" :key="item.id" :label="item.classifyName" :value="item.id"/>
-          </el-select>
+        <el-form-item label="分类" prop="classifyId" v-show="temp.consumeType !=3">
+          <el-cascader
+            v-model="temp.classifyId"
+            :options="classifyOptions"
+            :props="{ expandTrigger: 'hover' }"
+          ></el-cascader>
         </el-form-item>
         <el-form-item label="源账户" prop="sourceAccount">
           <el-select v-model="temp.sourceAccount" placeholder="请选择源账户" clearable style="width: 200px"
@@ -176,7 +174,7 @@
             <el-option v-for="item in accountList1" :key="item.accountName" :label="item.accountName" :value="item.id"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="目标账户" prop="targetAccount">
+        <el-form-item label="目标账户" prop="targetAccount" v-show="temp.consumeType==3">
           <el-select v-model="temp.targetAccount" placeholder="请选择目标账户" clearable style="width: 200px"
                      class="filter-item">
 
@@ -189,7 +187,6 @@
         <el-form-item label="成员" prop="relationId">
           <el-select v-model="temp.relationId" placeholder="请选择成员" clearable style="width: 200px"
                      class="filter-item">
-
             <el-option v-for="item in relationList1" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
@@ -201,7 +198,10 @@
           <el-input v-model="temp.projectId"/>
         </el-form-item>
         <el-form-item label="商家" prop="merchantId">
-          <el-input v-model="temp.merchantId"/>
+          <el-select v-model="temp.merchantId" placeholder="请选择商家" clearable style="width: 200px"
+                     class="filter-item">
+            <el-option v-for="item in merchantList1" :key="item.id" :label="item.name" :value="item.id"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="temp.remark"/>
@@ -238,7 +238,7 @@
     updateArticle,
     addOneExpand,
     tranferAccount,
-    addOneIncome, accountList, classifyList, relationList
+    addOneIncome, accountList, classifyList, relationList, classifyByGroup, merchantList
   } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
@@ -279,11 +279,14 @@
         tableKey: 0,
         list: null,
         total: 0,
-        totalCount:null,
+        totalCount:'',
         accountList1:null,
         classifyList1:null,
         relationList1:null,
+        merchantList1:null,
         listLoading: true,
+        classifyOptions:null,
+        startAndEndTime:null,
         accountQuery:{
 
         },
@@ -293,8 +296,12 @@
         relationQuery:{
 
         },
-        test1: {
-          id: 1
+        merchantQuery:{
+
+        },
+        consumeItemListQuery: {
+          classifyList:null,
+          startAndEndTime:null
         },
         listQuery: {
           page: 1,
@@ -338,54 +345,7 @@
         },
         downloadLoading: false,
         expends: [],
-        props: { multiple: true },
-        options: [{
-          value: 1,
-          label: '东南',
-          children: [{
-            value: 2,
-            label: '上海',
-            children: [
-              { value: 3, label: '普陀' },
-              { value: 4, label: '黄埔' },
-              { value: 5, label: '徐汇' }
-            ]
-          }, {
-            value: 7,
-            label: '江苏',
-            children: [
-              { value: 8, label: '南京' },
-              { value: 9, label: '苏州' },
-              { value: 10, label: '无锡' }
-            ]
-          }, {
-            value: 12,
-            label: '浙江',
-            children: [
-              { value: 13, label: '杭州' },
-              { value: 14, label: '宁波' },
-              { value: 15, label: '嘉兴' }
-            ]
-          }]
-        }, {
-          value: 17,
-          label: '西北',
-          children: [{
-            value: 18,
-            label: '陕西',
-            children: [
-              { value: 19, label: '西安' },
-              { value: 20, label: '延安' }
-            ]
-          }, {
-            value: 21,
-            label: '新疆维吾尔族自治区',
-            children: [
-              { value: 22, label: '乌鲁木齐' },
-              { value: 23, label: '克拉玛依' }
-            ]
-          }]
-        }]
+        props: { multiple: true ,expandTrigger: 'hover'},
       }
     },
     computed: {
@@ -413,9 +373,14 @@
       this.getAccountList()
       this.getClassifyList()
       this.getRelationList()
+      this.getMerchantList()
+      this.listClassifyByGroup()
       this.temp.consumeType=this.typeOptions[0]
     },
     methods: {
+      replace(input){
+        return input.replace('[','').replace(']','')
+      },
       toogleExpand(row) {
         let $table = this.$refs.table;
         this.list.map((item) => {
@@ -453,7 +418,7 @@
       },
       getList() {
         this.listLoading = true
-        fetchList(this.test1).then(response => {
+        fetchList(this.consumeItemListQuery).then(response => {
           this.list = response.data.items
           this.total = response.data.total
           this.totalCount=response.data.totalCount
@@ -491,6 +456,30 @@
         this.listLoading = true
         relationList(this.relationQuery).then(response1 => {
           this.relationList1 = response1.data
+          this.total = 2
+
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
+      },
+      getMerchantList() {
+        this.listLoading = true
+        merchantList(this.merchantQuery).then(response1 => {
+          this.merchantList1 = response1.data
+          this.total = 2
+
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
+      },
+      listClassifyByGroup() {
+        this.listLoading = true
+        classifyByGroup(this.relationQuery).then(response1 => {
+          this.classifyOptions = response1.data
           this.total = 2
 
           // Just to simulate the time of the request
@@ -549,9 +538,11 @@
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            this.temp.classifyId=this.temp.classifyId[1]
             if (this.temp.consumeType == 1) {
               addOneExpand(this.temp).then(() => {
                 this.list.unshift(this.temp)
+                this.getList()
                 this.dialogFormVisible = false
                 this.$notify({
                   title: '成功',
@@ -563,6 +554,7 @@
             } else if (this.temp.consumeType === 2) {
               addOneIncome(this.temp).then(() => {
                 this.list.unshift(this.temp)
+                this.getList()
                 this.dialogFormVisible = false
                 this.$notify({
                   title: '成功',
@@ -574,6 +566,7 @@
             } else if (this.temp.consumeType === 3) {
               tranferAccount(this.temp).then(() => {
                 this.list.unshift(this.temp)
+                this.getList()
                 this.dialogFormVisible = false
                 this.$notify({
                   title: '成功',
@@ -583,7 +576,6 @@
                 })
               })
             }
-            this.getList()
           }
         })
       },
