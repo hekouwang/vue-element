@@ -133,7 +133,7 @@
                 <el-table-column prop="money" label="金额" min-width="60px"></el-table-column>
                 <el-table-column prop="sourceAccountName" label="源账户"></el-table-column>
                 <el-table-column prop="merchantName" label="商家"></el-table-column>
-                <el-table-column prop="merchantName" label="成员"></el-table-column>
+                <el-table-column prop="relationName" label="成员"></el-table-column>
                 <el-table-column prop="targetAccountName" label="目标账户"></el-table-column>
                 <el-table-column prop="projectName" label="项目名"></el-table-column>
                 <el-table-column prop="remark" label="备注"></el-table-column>
@@ -190,17 +190,20 @@
             <el-option v-for="item in relationList1" :key="item.id" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
-        <el-form-item label-width="120px" label="选择时间" class="postInfo-container-item">
+        <el-form-item label-width="70px" label="选择时间" class="postInfo-container-item">
           <el-date-picker v-model="temp.createTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
                           placeholder="请选择时间"/>
         </el-form-item>
         <el-form-item label="项目" prop="projectId">
-          <el-input v-model="temp.projectId"/>
+          <el-select v-model="temp.projectId" placeholder="请选择项目" clearable style="width: 200px"
+                     class="filter-item">
+            <el-option v-for="item in projectList1" :key="item.id" :label="item.projectName" :value="item.id"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="商家" prop="merchantId">
           <el-select v-model="temp.merchantId" placeholder="请选择商家" clearable style="width: 200px"
                      class="filter-item">
-            <el-option v-for="item in merchantList1" :key="item.id" :label="item.name" :value="item.id"/>
+            <el-option v-for="item in merchantList1" :key="item.id" :label="item.merchantName" :value="item.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -238,7 +241,7 @@
     updateArticle,
     addOneExpand,
     tranferAccount,
-    addOneIncome, accountList, classifyList, relationList, classifyByGroup, merchantList
+    addOneIncome, accountList, classifyList, relationList, classifyByGroup, merchantList, projectList
   } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
@@ -284,6 +287,7 @@
         classifyList1:null,
         relationList1:null,
         merchantList1:null,
+        projectList1:null,
         listLoading: true,
         classifyOptions:null,
         startAndEndTime:null,
@@ -374,6 +378,7 @@
       this.getClassifyList()
       this.getRelationList()
       this.getMerchantList()
+      this.getProjectList()
       this.listClassifyByGroup()
       this.temp.consumeType=this.typeOptions[0]
     },
@@ -468,6 +473,18 @@
         this.listLoading = true
         merchantList(this.merchantQuery).then(response1 => {
           this.merchantList1 = response1.data
+          this.total = 2
+
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
+      },
+      getProjectList() {
+        this.listLoading = true
+        projectList(this.merchantQuery).then(response1 => {
+          this.projectList1 = response1.data
           this.total = 2
 
           // Just to simulate the time of the request

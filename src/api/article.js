@@ -79,6 +79,17 @@ export function merchantList(data) {
   })
 }
 
+export function projectList(data) {
+  return request({
+    data,
+    url: '/project/listProject',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 
 export function classifyByGroup(data) {
   return request({
