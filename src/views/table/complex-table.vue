@@ -64,7 +64,7 @@
     <div class="app-container">
       <table>
         <tr>
-          <td><span style="font-size: 22px">日期</span>&nbsp;{{ totalCount.endTime }} ~ &nbsp;{{ totalCount.startTime }}</td>
+          <td><span style="font-size: 22px">日期</span>&nbsp;<span v-if="totalCount !=''">{{ totalCount.endTime }} </span>~ &nbsp;<span v-if="totalCount !=''">{{ totalCount.startTime }}</span></td>
           <td></td>
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
