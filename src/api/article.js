@@ -90,7 +90,7 @@ export function projectList(data) {
   })
 }
 
-
+//分组展示分类
 export function classifyByGroup(data) {
   return request({
     data,
@@ -101,6 +101,19 @@ export function classifyByGroup(data) {
     }
   })
 }
+
+//分类统计支出
+export function listConsumeItemGroupAndOrder(data) {
+  return request({
+    data,
+    url: '/cousumeItem/listConsumeItemGroupAndOrder',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',
