@@ -1,11 +1,13 @@
 <template>
-  <div :id="id" :class="className" :style="{height:height,width:width}"/>
+  <div :id="id" :class="className" :style="{height:height,width:width}">
+  </div>
+
 </template>
 
 <script>
   import echarts from 'echarts'
   import resize from './mixins/resize'
-  import { fetchList, listConsumeItemGroupAndOrder } from '@/api/article'
+  import { listConsumeItemGroupAndOrder } from '@/api/article'
 
   export default {
     mixins: [resize],
@@ -77,7 +79,7 @@
 
         this.chart.setOption({
             title: {
-              text: '一级分类支出'
+              // text: '一级分类支出'
               // subtext: '数据来自网络'
             },
             tooltip: {
