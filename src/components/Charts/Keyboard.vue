@@ -1,6 +1,8 @@
 <template>
   <div :id="id" :class="className" :style="{height:height,width:width}">
+    <div>{{classifyList1}}</div>
   </div>
+
 
 </template>
 
@@ -27,19 +29,37 @@
       height: {
         type: String,
         default: '200px'
+      },
+      classifyList1: {
+        type: Array,
+        required:true,
+        default: () => {
+          return []
+        }
+      },
+      moneyList: {
+        type: Array,
+        required:true,
+        default: () => {
+          return []
+        }
+      }
+    },
+    //这里用watch方法来监听父组件传过来的值，来实现实时更新
+    watch:{
+      classifyList1(val){    //message即为父组件的值，val参数为值
+          this.initChart()    //将父组件的值赋给childrenMessage 子组件的值
+      },
+      moneyList(val){    //message即为父组件的值，val参数为值
+        this.initChart()    //将父组件的值赋给childrenMessage 子组件的值
       }
     },
     data() {
       return {
-        chart: null,
-        classifyList: null,
-        moneyList: null,
-        param: {}
+        chart: null
       }
     },
-    created() {
-      this.getList()
-    },
+
     mounted() {
       this.initChart()
     },
@@ -51,20 +71,6 @@
       this.chart = null
     },
     methods: {
-      getList() {
-        this.listLoading = true
-        listConsumeItemGroupAndOrder(this.param).then(response => {
-          this.classifyList = response.data.classifyList
-          this.moneyList = response.data.moneyList
-          this.total = response.data.total
-          this.totalCount = response.data.totalCount
-          this.initChart()
-          // Just to simulate the time of the request
-          setTimeout(() => {
-            this.listLoading = false
-          }, 1.5 * 1000)
-        })
-      },
       initChart() {
         this.chart = echarts.init(document.getElementById(this.id))
 
@@ -105,7 +111,7 @@
             },
             yAxis: {
               type: 'category',
-              data: this.classifyList
+              data: this.classifyList1
             },
             series: [
               {
