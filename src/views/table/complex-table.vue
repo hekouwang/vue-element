@@ -208,6 +208,7 @@
             clearable
             style="width: 90px"
             class="filter-item"
+            @change="handleChange"
           >
             <el-option v-for="item in typeOptions" :key="item.key" :label="item.label" :value="item.value" />
           </el-select>
@@ -578,7 +579,7 @@ export default {
     },
     listClassifyByGroup() {
       this.listLoading = true
-      classifyByGroup(this.relationQuery).then(response1 => {
+      classifyByGroup(this.classifyQuery).then(response1 => {
         this.classifyOptions = response1.data
         this.total = 2
 
@@ -587,6 +588,15 @@ export default {
           this.listLoading = false
         }, 1.5 * 1000)
       })
+    },
+    handleChange(item){
+        if(item==1){
+          this.classifyQuery.classifyType=1
+          this.listClassifyByGroup();
+        }else if(item==2){
+          this.classifyQuery.classifyType=2
+          this.listClassifyByGroup();
+        }
     },
     handleFilter() {
       this.listQuery.page = 1

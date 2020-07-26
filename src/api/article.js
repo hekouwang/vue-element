@@ -114,6 +114,19 @@ export function listConsumeItemGroupAndOrder(data) {
   })
 }
 
+
+//分类统计支出(饼图)
+export function listConsumeItemGroupAndOrderCake(data) {
+  return request({
+    data,
+    url: '/cousumeItem/listConsumeItemGroupAndOrderCake',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',

@@ -341,6 +341,12 @@ const asyncRoutes = [
         component: 'views/example/list',
         name: 'ArticleList',
         meta: { title: 'articleList', icon: 'list' }
+      },
+      {
+        path: 'classifyManage',
+        component: 'views/example/classifyManage',
+        name: 'ClassifyManage',
+        meta: { title: '分类管理', icon: 'list' }
       }
     ]
   },

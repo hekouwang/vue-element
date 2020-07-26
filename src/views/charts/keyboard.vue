@@ -31,7 +31,7 @@
       start-placeholder="开始日期"
       end-placeholder="结束日期"
     />
-    <el-button id="text" v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+    <el-button id="text"  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
       {{ $t('table.search') }}
     </el-button>
     <div style="margin-bottom: 10px"></div>
