@@ -25,7 +25,7 @@ export default {
     dragKanban: '可拖拽看板',
     charts: '图表',
     keyboardChart: '条形图表',
-    lineChart: '折线图',
+    lineChart: '饼图',
     mixChart: '混合图表',
     example: '系统管理',
     nested: '路由嵌套',

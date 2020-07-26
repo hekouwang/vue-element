@@ -83,6 +83,12 @@ export default {
           left: 'left',
           data: this.classifyList1
         },
+
+        labelLine: {
+          normal: {
+            show: true
+          }
+        },
         series: [
           {
             name: '',
@@ -90,6 +96,20 @@ export default {
             radius: '55%',
             center: ['50%', '60%'],
             data: this.moneyList,
+            label: {
+              normal: {
+                formatter: '{b}:{c}' + '\n\r' + '({d}%)',
+                show: true,
+                position: 'left'
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,

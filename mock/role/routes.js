@@ -233,17 +233,18 @@ const asyncRoutes = [
     },
     children: [
       {
-        path: 'keyboard',
-        component: 'views/charts/keyboard',
-        name: 'KeyboardChart',
-        meta: { title: 'keyboardChart', noCache: true }
-      },
-      {
         path: 'line',
         component: 'views/charts/line',
         name: 'LineChart',
         meta: { title: 'lineChart', noCache: true }
       },
+      {
+        path: 'keyboard',
+        component: 'views/charts/keyboard',
+        name: 'KeyboardChart',
+        meta: { title: 'keyboardChart', noCache: true }
+      },
+
       {
         path: 'mixchart',
         component: 'views/charts/mixChart',
