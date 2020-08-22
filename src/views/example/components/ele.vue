@@ -2,46 +2,46 @@
 <el-tree
   :data="data"
   :props="defaultProps"
-
+  accordion
   @node-click="handleNodeClick">
 </el-tree>
 </template>
 <script>
 import Bus from './bus.js'
+import { classifyByGroup, classifyList } from '../../../api/article'
 export default {
   data() {
     return {
-      data: [{
-        label: '一级 1',
-        children: [{
-          label: '二级 1-1',
-        }]
-      }, {
-        label: '一级 2',
-        children: [{
-          label: '二级 2-1',
-        }, {
-          label: '二级 2-2',
-        }]
-      }, {
-        label: '一级 3',
-        children: [{
-          label: '二级 3-1',
-        }, {
-          label: '二级 3-2',
-        }]
-      }],
+      data: null,
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      classifyQuery: {
+
+      },
     };
+  },
+  created() {
+    this.listClassifyByGroup()
   },
   methods: {
     handleNodeClick(data) {
-      console.log(data.$treeNodeId);
-      Bus.$emit('val',data.$treeNodeId);
-    }
+      console.log(data.id);
+      Bus.$emit('val',data);
+    },
+    listClassifyByGroup() {
+      this.listLoading = true
+      classifyByGroup(this.classifyQuery).then(response1 => {
+        this.data = response1.data
+        this.total = 2
+
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    },
   }
 };
 </script>

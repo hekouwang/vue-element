@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+
+export function getClassifyByIdOrParentId(data) {
+  return request({
+    url: '/classify/getByIdOrParentId',
+    method: 'post',
+    data
+  })
+}
+
 export function addOneExpand(data) {
   return request({
     url: '/bussiness/addOneExpand',

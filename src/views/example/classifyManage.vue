@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div style="margin-top: 50px;margin-left: 40px">
+
     <ele class="ele"></ele>
     <eatable class="eatable"></eatable>
   </div>

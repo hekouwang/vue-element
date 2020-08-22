@@ -4,55 +4,53 @@
     stripe
     style="width: 100%">
     <el-table-column
-      prop="date"
-      label="日期"
+      prop="id"
+      label="id"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="name"
-      label="姓名"
+      prop="classifyName"
+      label="名称"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="address"
-      label="地址">
+      prop="createTime"
+      label="创建时间">
     </el-table-column>
   </el-table>
 </template>
 
 <script>
-import Bus from './bus.js'
+  import Bus from './bus.js'
+  import { getClassifyByIdOrParentId } from '../../../api/article'
 
-export default {
-  name: "eatable",
-  data() {
-    return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
-    }
-  },
-  mounted() {
-    Bus.$on('val', (data) => {
-      console.log('接收到的数据是' + data)
-      if (data === 1) {
-        this.tableData[0].date = "我改变了"
+  export default {
+    name: 'eatable',
+    data() {
+      return {
+        tableData: null,
+        classifyQuery: {}
       }
-    })
+    },
+    mounted() {
+      Bus.$on('val', (data) => {
+        console.log('接收到的数据是' + data.label)
+        this.classifyQuery.id = data.id,
+        this.classifyQuery.parentId = data.parentId
+        this.getClassifyByIdOrParentId()
+      })
+    },
+    methods: {
+      getClassifyByIdOrParentId() {
+        this.listLoading = true
+        getClassifyByIdOrParentId(this.classifyQuery).then(response1 => {
+          this.tableData = response1.data
+          // Just to simulate the time of the request
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 1000)
+        })
+      }
+    }
   }
-}
 </script>

@@ -54,25 +54,25 @@
       </el-select>
       项目：
       <el-select
-        v-model="temp.consumeType"
+        v-model="consumeItemListQuery.projectList"
         placeholder="请选择"
         clearable
         style="width: 90px"
         multiple
         class="filter-item"
       >
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
+        <el-option v-for="item in projectList1" :key="item.id" :label="item.projectName" :value="item.id" />
       </el-select>
       成员：
       <el-select
-        v-model="temp.consumeType"
+        v-model="consumeItemListQuery.relationList"
         placeholder="请选择"
         clearable
         style="width: 90px"
         multiple
         class="filter-item"
       >
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
+        <el-option v-for="item in relationList1" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
     </div>
     <div class="filter-container">
@@ -364,7 +364,13 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
-      totalCount: '',
+      totalCount: {
+        endTime:null,
+        startTime:null,
+        totalIncome:0,
+        totalExpense:0,
+        toalRemain:0
+      },
       accountList1: null,
       classifyList1: null,
       relationList1: null,
@@ -388,7 +394,9 @@ export default {
       consumeItemListQuery: {
         classifyList: null,
         startAndEndTime: null,
-        merchantList: null
+        merchantList: [],
+        projectList:[],
+        relationList:[]
       },
       listQuery: {
         page: 1,
@@ -510,7 +518,10 @@ export default {
       fetchList(this.consumeItemListQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
-        this.totalCount = response.data.totalCount
+        if(this.total !=0){
+          this.totalCount = response.data.totalCount
+        }
+
 
         // Just to simulate the time of the request
         setTimeout(() => {
