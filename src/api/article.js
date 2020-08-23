@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function addClassify(data) {
+  return request({
+    url: '/classify/addClassify',
+    method: 'post',
+    data
+  })
+}
 
 export function getClassifyByIdOrParentId(data) {
   return request({

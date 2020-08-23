@@ -34,8 +34,6 @@ export default {
       this.listLoading = true
       classifyByGroup(this.classifyQuery).then(response1 => {
         this.data = response1.data
-        this.total = 2
-
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false

@@ -43,7 +43,7 @@
       </el-select>
       商家：
       <el-select
-        v-model="consumeItemListQuery.merchantList"
+        v-model="temp.merchantList"
         placeholder="请选择"
         clearable
         style="width: 90px"
