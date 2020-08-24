@@ -224,6 +224,12 @@ export const asyncRoutes = [
         component: () => import('@/views/example/classifyManage'),
         name: 'ClassifyManage',
         meta: { title: '分类管理', icon: 'list' }
+      },
+      {
+        path: 'wishManage',
+        component: () => import('@/views/example/wishManage'),
+        name: 'WishManage',
+        meta: { title: '心愿管理', icon: 'list'  }
       }
     ]
   },

@@ -27,86 +27,75 @@
       </el-checkbox>
     </div>
     <div class="app-container">
-      <table>
-        <tr>
-          <td><span style="font-size: 22px">日期</span>&nbsp;{{ totalCount.endTime }} ~ &nbsp;{{ totalCount.startTime }}</td>
-          <td></td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td><span style="font-size: 12px">余额</span>&nbsp;<span style="color: red;font-size: 22px">{{ totalCount.totalIncome}}</span></td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td><span style="font-size: 12px">流入</span>&nbsp;<span style="color: green;font-size: 22px">{{ totalCount.totalExpense }}</span></td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-          <td></td>
-          <td><span style="font-size: 12px">流出</span>&nbsp;<span style="font-size: 22px">{{ totalCount.toalRemain}}</span></td>
-        </tr>
-      </table>
+<!--      <table>-->
+<!--        <tr>-->
+<!--&lt;!&ndash;          <td><span style="font-size: 22px">日期</span>&nbsp;{{ totalCount.endTime }} ~ &nbsp;{{ totalCount.startTime }}</td>&ndash;&gt;-->
+<!--          <td></td>-->
+<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
+<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
+<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
+<!--&lt;!&ndash;          <td><span style="font-size: 12px">余额</span>&nbsp;<span style="color: red;font-size: 22px">{{ totalCount.totalIncome}}</span></td>&ndash;&gt;-->
+<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
+<!--          <td><span style="font-size: 12px">流入</span>&nbsp;<span style="color: green;font-size: 22px">{{ totalCount.totalExpense }}</span></td>-->
+<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
+<!--          <td></td>-->
+<!--          <td><span style="font-size: 12px">流出</span>&nbsp;<span style="font-size: 22px">{{ totalCount.toalRemain}}</span></td>-->
+<!--        </tr>-->
+<!--      </table>-->
     </div>
     <template>
       <div class="layout">
 
-        <el-table :data="list" >
+        <el-table :data="list" stripe>
 <!--                  :expand-row-keys="expends" :row-key="getRowKeys"-->
 <!--                  :default-expand-all="false">-->
 
           <el-table-column align="center"
-                           label="日期"
-                           prop="date">
+                           label="编号"
+                           prop="id">
+          </el-table-column>
+          <el-table-column align="center"
+                           label="心愿名称"
+                           prop="name">
+          </el-table-column>
+          <el-table-column align="center"
+                           label="心愿总额"
+                           prop="totalMoney">
+          </el-table-column>
+          <el-table-column align="center"
+                           label="每日攒钱"
+                           prop="dayMoney">
+          </el-table-column>
+          <el-table-column align="center"
+                           label="心愿余额"
+                           prop="balance">
+          </el-table-column>
+          <el-table-column align="center"
+                           label="预计完成时间"
+                           prop="balance">
+          </el-table-column>
+          <el-table-column align="center"
+                           label="倒数日"
+                           prop="balance">
+          </el-table-column>
+          <el-table-column align="center"
+                           label="创建时间"
+                           prop="balance">
+          </el-table-column>
+          <el-table-column align="center"
+                           label="心愿状态"
+                           prop="status">
           </el-table-column>
 
-          <el-table-column align="center"
-                           label="收入"
-                           prop="in" >
-            <template scope="scope">
-              <span style="color: red">{{ scope.row.in }}</span>
-            </template>
-          </el-table-column>
 
-          <el-table-column align="center"
-                           label="支出"
-                           prop="out">
-            <template scope="scope">
-              <span style="color: green">{{ scope.row.out }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column align="center"
-                           label="操作">
+          <el-table-column label="操作"  fixed="right">
             <template slot-scope="scope">
-            <el-button type="primary" @click="toogleExpand(scope.row)">查看详情</el-button>
+              <el-button @click="handleClick(scope.row)" type="text" size="small">转移</el-button>
+              <el-button type="text" size="small">编辑</el-button>
+              <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
+              <el-button @click="handleClick(scope.row)" type="text" size="small">禁用</el-button>
             </template>
           </el-table-column>
-          <el-table-column type="expand">
-
-            <template slot-scope="scope">
-              <el-table
-                :key="tableKey"
-                v-loading="listLoading"
-                :data="scope.row.cconsumeItemReturnDTOList"
-                border
-                fit
-                highlight-current-row
-                style="width: 100%;"
-                ref = “table”
-                @sort-change="sortChange"
-              >
-                <el-table-column prop="classifyName" label="分类"></el-table-column>
-                <el-table-column prop="consumeType" :formatter="formatterData" label="类型">
-
-                </el-table-column>
-                <el-table-column prop="money" label="金额"></el-table-column>
-                <el-table-column prop="sourceAccountName" label="源账户"></el-table-column>
-                <el-table-column prop="merchantName" label="商家"></el-table-column>
-                <el-table-column prop="targetAccountName" label="目标账户"></el-table-column>
-                <el-table-column prop="projectName" label="项目名"></el-table-column>
-                <el-table-column prop="remark" label="备注"></el-table-column>
-                <el-table-column prop="createTime" label="时间" min-width="100px"></el-table-column>
-              </el-table>
-            </template>
-
-          </el-table-column>
-
         </el-table>
       </div>
     </template>
@@ -115,65 +104,65 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
                 @pagination="getList"/>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"
-               style="width: 400px; margin-left:50px;">
-        <el-form-item label="记账类型">
-          <el-select v-model="temp.consumeType" :placeholder="请选择记账类型" clearable style="width: 90px"
-                     class="filter-item">
-            <el-option v-for="item in typeOptions" :key="item.key" :label="item.label" :value="item.value"/>
-          </el-select>
-        </el-form-item>
+<!--    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">-->
+<!--      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"-->
+<!--               style="width: 400px; margin-left:50px;">-->
+<!--        <el-form-item label="记账类型">-->
+<!--          <el-select v-model="temp.consumeType" :placeholder="请选择记账类型" clearable style="width: 90px"-->
+<!--                     class="filter-item">-->
+<!--            <el-option v-for="item in typeOptions" :key="item.key" :label="item.label" :value="item.value"/>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
 
-        <el-form-item label="分类" prop="classifyId">
-          <el-select v-model="temp.classifyId" :placeholder="请选择类别" clearable style="width: 200px"
-                     class="filter-item" >
-            <el-option v-for="item in classifyList1" :key="item.id" :label="item.classifyName" :value="item.id"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="源账户" prop="sourceAccount">
-          <el-select v-model="temp.sourceAccount" :placeholder="请选择源账户" clearable style="width: 200px"
-                     class="filter-item">
-            <el-option v-for="item in accountList1" :key="item.accountName" :label="item.accountName" :value="item.id"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="目标账户" prop="targetAccount">
-          <el-select v-model="temp.targetAccount" :placeholder="请选择目标账户" clearable style="width: 200px"
-                     class="filter-item">
+<!--        <el-form-item label="分类" prop="classifyId">-->
+<!--          <el-select v-model="temp.classifyId" :placeholder="请选择类别" clearable style="width: 200px"-->
+<!--                     class="filter-item" >-->
+<!--            <el-option v-for="item in classifyList1" :key="item.id" :label="item.classifyName" :value="item.id"/>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="源账户" prop="sourceAccount">-->
+<!--          <el-select v-model="temp.sourceAccount" :placeholder="请选择源账户" clearable style="width: 200px"-->
+<!--                     class="filter-item">-->
+<!--            <el-option v-for="item in accountList1" :key="item.accountName" :label="item.accountName" :value="item.id"/>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="目标账户" prop="targetAccount">-->
+<!--          <el-select v-model="temp.targetAccount" :placeholder="请选择目标账户" clearable style="width: 200px"-->
+<!--                     class="filter-item">-->
 
-            <el-option v-for="item in accountList1" :key="item.id" :label="item.accountName" :value="item.id"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="金额" prop="money">
-          <el-input v-model="temp.money"/>
-        </el-form-item>
-        <el-form-item label="成员" prop="relationId">
-          <el-input v-model="temp.relationId"/>
-        </el-form-item>
-        <el-form-item label-width="120px" label="选择时间" class="postInfo-container-item">
-          <el-date-picker v-model="temp.createTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
-                          placeholder="请选择时间"/>
-        </el-form-item>
-        <el-form-item label="项目" prop="projectId">
-          <el-input v-model="temp.projectId"/>
-        </el-form-item>
-        <el-form-item label="商家" prop="merchantId">
-          <el-input v-model="temp.merchantId"/>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="temp.remark"/>
-        </el-form-item>
+<!--            <el-option v-for="item in accountList1" :key="item.id" :label="item.accountName" :value="item.id"/>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="金额" prop="money">-->
+<!--          <el-input v-model="temp.money"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="成员" prop="relationId">-->
+<!--          <el-input v-model="temp.relationId"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label-width="120px" label="选择时间" class="postInfo-container-item">-->
+<!--          <el-date-picker v-model="temp.createTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"-->
+<!--                          placeholder="请选择时间"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="项目" prop="projectId">-->
+<!--          <el-input v-model="temp.projectId"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="商家" prop="merchantId">-->
+<!--          <el-input v-model="temp.merchantId"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="备注" prop="remark">-->
+<!--          <el-input v-model="temp.remark"/>-->
+<!--        </el-form-item>-->
 
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          {{ $t('table.cancel') }}
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          {{ $t('table.confirm') }}
-        </el-button>
-      </div>
-    </el-dialog>
+<!--      </el-form>-->
+<!--      <div slot="footer" class="dialog-footer">-->
+<!--        <el-button @click="dialogFormVisible = false">-->
+<!--          {{ $t('table.cancel') }}-->
+<!--        </el-button>-->
+<!--        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">-->
+<!--          {{ $t('table.confirm') }}-->
+<!--        </el-button>-->
+<!--      </div>-->
+<!--    </el-dialog>-->
 
     <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
       <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
@@ -188,18 +177,18 @@
 </template>
 
 <script>
-  import {
-    fetchList,
-    fetchPv,
-    createArticle,
-    updateArticle,
-    addOneExpand,
-    tranferAccount,
-    addOneIncome, accountList, classifyList
-  } from '@/api/article'
+import {
+  fetchList,
+  fetchPv,
+  createArticle,
+  updateArticle,
+  addOneExpand,
+  tranferAccount,
+  addOneIncome, accountList, classifyList, listWish
+} from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+  import Pagination from '@/components/Pagination/index' // secondary package based on el-pagination
 
   const calendarTypeOptions = [
     { key: 'CN', display_name: 'China' },
@@ -250,12 +239,8 @@
           id: 1
         },
         listQuery: {
-          page: 1,
-          limit: 20,
-          importance: undefined,
-          title: undefined,
-          type: undefined,
-          sort: '+id'
+          current: 1,
+          pageSize: 20,
         },
         importanceOptions: [1, 2, 3],
         typeOptions: [{ label: '支出', key: '1',value:1 }, { label: '收入', key: '2',value:2 },
@@ -320,47 +305,12 @@
       this.temp.consumeType=this.typeOptions[0]
     },
     methods: {
-      toogleExpand(row) {
-        let $table = this.$refs.table;
-        this.list.map((item) => {
-          if (row.id != item.id) {
-            $table.toggleRowExpansion(item, false)
-          }
-        })
-        $table.toggleRowExpansion(row)
-      },
-      formatterData(row, column) {
-        var checkType = "";
-        switch (row.consumeType) {
-          case 1:
-            checkType = "支出";
-            break;
-          case 2:
-            checkType = "收入";
-            break;
-          case 3:
-            checkType = "转账";
-            break;
-          default:
-            checkType = "无";
-        }
-        return checkType;
-      },
-
-      //设置table中的扩展项，展开的id，此处我需要全部展开
-      getExpends() {
-        var Id = this.list.map(item => item.id)
-        this.expends = Id
-      },
-      getRowKeys(row) {
-        return row.id
-      },
       getList() {
         this.listLoading = true
-        fetchList(this.test1).then(response => {
-          this.list = response.data.items
+        listWish(this.listQuery).then(response => {
+          this.list = response.data
           this.total = 2
-          this.totalCount=response.data.totalCount
+          // this.totalCount=response.data.totalCount
 
           // Just to simulate the time of the request
           setTimeout(() => {

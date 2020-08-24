@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function listWish(data) {
+  return request({
+    url: '/wish/listWish',
+    method: 'post',
+    data
+  })
+}
+
 export function addClassify(data) {
   return request({
     url: '/classify/addClassify',
