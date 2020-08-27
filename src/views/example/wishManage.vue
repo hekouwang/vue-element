@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="temp.consumeType" :placeholder="$t('table.importance')" clearable style="width: 90px"
+      <el-select v-model="reqWish.consumeType" :placeholder="$t('table.importance')" clearable style="width: 90px"
                  class="filter-item">-->
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
       </el-select>
-      <el-select v-model="temp.consumeType" :placeholder="$t('table.importance')" clearable style="width: 90px"
+      <el-select v-model="reqWish.consumeType" :placeholder="$t('table.importance')" clearable style="width: 90px"
                  class="filter-item">-->
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item"/>
       </el-select>
@@ -18,30 +18,11 @@
                  @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download"
-                 @click="handleDownload">
-        {{ $t('table.export') }}
-      </el-button>
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         {{ $t('table.reviewer') }}
       </el-checkbox>
     </div>
     <div class="app-container">
-<!--      <table>-->
-<!--        <tr>-->
-<!--&lt;!&ndash;          <td><span style="font-size: 22px">日期</span>&nbsp;{{ totalCount.endTime }} ~ &nbsp;{{ totalCount.startTime }}</td>&ndash;&gt;-->
-<!--          <td></td>-->
-<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
-<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
-<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
-<!--&lt;!&ndash;          <td><span style="font-size: 12px">余额</span>&nbsp;<span style="color: red;font-size: 22px">{{ totalCount.totalIncome}}</span></td>&ndash;&gt;-->
-<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
-<!--          <td><span style="font-size: 12px">流入</span>&nbsp;<span style="color: green;font-size: 22px">{{ totalCount.totalExpense }}</span></td>-->
-<!--          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>-->
-<!--          <td></td>-->
-<!--          <td><span style="font-size: 12px">流出</span>&nbsp;<span style="font-size: 22px">{{ totalCount.toalRemain}}</span></td>-->
-<!--        </tr>-->
-<!--      </table>-->
     </div>
     <template>
       <div class="layout">
@@ -59,38 +40,42 @@
                            prop="name">
           </el-table-column>
           <el-table-column align="center"
-                           label="心愿总额"
+                           label="心愿总额(元)"
                            prop="totalMoney">
           </el-table-column>
           <el-table-column align="center"
-                           label="每日攒钱"
+                           label="每日攒钱(元)"
                            prop="dayMoney">
           </el-table-column>
           <el-table-column align="center"
-                           label="心愿余额"
+                           label="心愿余额(元)"
                            prop="balance">
           </el-table-column>
           <el-table-column align="center"
                            label="预计完成时间"
-                           prop="balance">
+                           prop="accomplishTime">
           </el-table-column>
           <el-table-column align="center"
                            label="倒数日"
-                           prop="balance">
+                           prop="apartDays">
           </el-table-column>
           <el-table-column align="center"
                            label="创建时间"
-                           prop="balance">
+                           prop="createTime">
           </el-table-column>
           <el-table-column align="center"
                            label="心愿状态"
                            prop="status">
+            <template scope="scope">
+              <span v-if='scope.row.status==="doing"' style="color: #2ac06d">进行中</span>
+              <span v-if='scope.row.status==="finished"' style="color: #3b91b6;">已完成</span>
+              <span v-if='scope.row.status==="canceled"' style="color: red">已取消</span>
+            </template>
           </el-table-column>
 
 
           <el-table-column label="操作"  fixed="right">
             <template slot-scope="scope">
-              <el-button @click="handleClick(scope.row)" type="text" size="small">转移</el-button>
               <el-button type="text" size="small">编辑</el-button>
               <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
               <el-button @click="handleClick(scope.row)" type="text" size="small">禁用</el-button>
@@ -104,65 +89,35 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
                 @pagination="getList"/>
 
-<!--    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">-->
-<!--      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px"-->
-<!--               style="width: 400px; margin-left:50px;">-->
-<!--        <el-form-item label="记账类型">-->
-<!--          <el-select v-model="temp.consumeType" :placeholder="请选择记账类型" clearable style="width: 90px"-->
-<!--                     class="filter-item">-->
-<!--            <el-option v-for="item in typeOptions" :key="item.key" :label="item.label" :value="item.value"/>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
+    <el-dialog title="创建心愿" :visible.sync="dialogFormVisible" center>
+      <el-form ref="dataForm" :rules="rules" :model="reqWish" label-position="left" label-width="70px"
+               style="width: 400px; margin-left:50px;">
+        <el-form-item label="心愿名称" prop="name">
+          <el-input v-model="reqWish.name"/>
+        </el-form-item>
+        <el-form-item label="源账户" prop="account">
+          <el-select v-model="reqWish.accountId" placeholder="请选择账户" clearable style="width: 200px"
+                     class="filter-item">
+            <el-option v-for="item in accountList1" :key="item.accountName" :label="item.accountName" :value="item.id"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="金额" prop="totalMoney">
+          <el-input v-model="reqWish.totalMoney"/>
+        </el-form-item>
+        <el-form-item label="每日攒钱" prop="dayMoney">
+          <el-input v-model="reqWish.dayMoney"/>
+        </el-form-item>
 
-<!--        <el-form-item label="分类" prop="classifyId">-->
-<!--          <el-select v-model="temp.classifyId" :placeholder="请选择类别" clearable style="width: 200px"-->
-<!--                     class="filter-item" >-->
-<!--            <el-option v-for="item in classifyList1" :key="item.id" :label="item.classifyName" :value="item.id"/>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="源账户" prop="sourceAccount">-->
-<!--          <el-select v-model="temp.sourceAccount" :placeholder="请选择源账户" clearable style="width: 200px"-->
-<!--                     class="filter-item">-->
-<!--            <el-option v-for="item in accountList1" :key="item.accountName" :label="item.accountName" :value="item.id"/>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="目标账户" prop="targetAccount">-->
-<!--          <el-select v-model="temp.targetAccount" :placeholder="请选择目标账户" clearable style="width: 200px"-->
-<!--                     class="filter-item">-->
-
-<!--            <el-option v-for="item in accountList1" :key="item.id" :label="item.accountName" :value="item.id"/>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="金额" prop="money">-->
-<!--          <el-input v-model="temp.money"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="成员" prop="relationId">-->
-<!--          <el-input v-model="temp.relationId"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label-width="120px" label="选择时间" class="postInfo-container-item">-->
-<!--          <el-date-picker v-model="temp.createTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"-->
-<!--                          placeholder="请选择时间"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="项目" prop="projectId">-->
-<!--          <el-input v-model="temp.projectId"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="商家" prop="merchantId">-->
-<!--          <el-input v-model="temp.merchantId"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="备注" prop="remark">-->
-<!--          <el-input v-model="temp.remark"/>-->
-<!--        </el-form-item>-->
-
-<!--      </el-form>-->
-<!--      <div slot="footer" class="dialog-footer">-->
-<!--        <el-button @click="dialogFormVisible = false">-->
-<!--          {{ $t('table.cancel') }}-->
-<!--        </el-button>-->
-<!--        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">-->
-<!--          {{ $t('table.confirm') }}-->
-<!--        </el-button>-->
-<!--      </div>-->
-<!--    </el-dialog>-->
+      </el-form>
+      <div slot="footer" class="dialog-footer" >
+        <el-button @click="dialogFormVisible = false">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button type="primary" @click="createData()">
+          {{ $t('table.confirm') }}
+        </el-button>
+      </div>
+    </el-dialog>
 
     <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
       <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
@@ -184,7 +139,7 @@ import {
   updateArticle,
   addOneExpand,
   tranferAccount,
-  addOneIncome, accountList, classifyList, listWish
+  addOneIncome, accountList, classifyList, listWish, addWish, listWishAccount
 } from '@/api/article'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
@@ -249,16 +204,11 @@ import {
         sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
         statusOptions: ['published', 'draft', 'deleted'],
         showReviewer: false,
-        temp: {
-          consumeType: '',
-          classifyId: '',
-          sourceAccount: '',
-          targetAccount: '',
-          money: 0,
-          relationId: '',
-          createTime: '',
-          projectId: '',
-          merchantId: '',
+        reqWish: {
+          name: '',
+          accountId: '',
+          totalMoney: '',
+          dayMoney: '',
           remark: ''
         },
         dialogFormVisible: false,
@@ -302,7 +252,7 @@ import {
       this.getList()
       this.getAccountList()
       this.getClassifyList()
-      this.temp.consumeType=this.typeOptions[0]
+      this.reqWish.consumeType=this.typeOptions[0]
     },
     methods: {
       getList() {
@@ -320,9 +270,8 @@ import {
       },
       getAccountList() {
         this.listLoading = true
-        accountList(this.accountQuery).then(response1 => {
+        listWishAccount(this.accountQuery).then(response1 => {
           this.accountList1 = response1.data
-          this.total = 2
 
           // Just to simulate the time of the request
           setTimeout(() => {
@@ -367,8 +316,8 @@ import {
         }
         this.handleFilter()
       },
-      resetTemp() {
-        this.temp = {
+      resetreqWish() {
+        this.reqWish = {
           consumeType: 0,
           classifyId: '',
           sourceAccount: '',
@@ -382,19 +331,15 @@ import {
         }
       },
       handleCreate() {
-        this.resetTemp()
+        this.resetreqWish()
         this.dialogStatus = 'create'
         this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
       },
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            if (this.temp.consumeType == 1) {
-              addOneExpand(this.temp).then(() => {
-                this.list.unshift(this.temp)
+              addWish(this.reqWish).then(() => {
+                this.list.unshift(this.reqWish)
                 this.dialogFormVisible = false
                 this.$notify({
                   title: '成功',
@@ -403,35 +348,12 @@ import {
                   duration: 2000
                 })
               })
-            } else if (this.temp.consumeType === 2) {
-              addOneIncome(this.temp).then(() => {
-                this.list.unshift(this.temp)
-                this.dialogFormVisible = false
-                this.$notify({
-                  title: '成功',
-                  message: '创建成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              })
-            } else if (this.temp.consumeType === 3) {
-              tranferAccount(this.temp).then(() => {
-                this.list.unshift(this.temp)
-                this.dialogFormVisible = false
-                this.$notify({
-                  title: '成功',
-                  message: '创建成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              })
-            }
           }
         })
       },
       handleUpdate(row) {
-        this.temp = Object.assign({}, row) // copy obj
-        this.temp.timestamp = new Date(this.temp.timestamp)
+        this.reqWish = Object.assign({}, row) // copy obj
+        this.reqWish.timestamp = new Date(this.reqWish.timestamp)
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
         this.$nextTick(() => {
@@ -441,11 +363,11 @@ import {
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            const tempData = Object.assign({}, this.temp)
-            tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-            updateArticle(tempData).then(() => {
-              const index = this.list.findIndex(v => v.id === this.temp.id)
-              this.list.splice(index, 1, this.temp)
+            const reqWishData = Object.assign({}, this.reqWish)
+            reqWishData.timestamp = +new Date(reqWishData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+            updateArticle(reqWishData).then(() => {
+              const index = this.list.findIndex(v => v.id === this.reqWish.id)
+              this.list.splice(index, 1, this.reqWish)
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',

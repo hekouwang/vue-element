@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+export function addWish(data) {
+  return request({
+    url: '/wish/addWish',
+    method: 'post',
+    data
+  })
+}
+
+
 export function listWish(data) {
   return request({
     url: '/wish/listWish',
@@ -69,6 +78,15 @@ export function accountList(data) {
     }
   })
 }
+
+export function listWishAccount(data) {
+  return request({
+    url: '/account/listWishAccount',
+    method: 'post',
+    data
+  })
+}
+
 
 export function classifyList(data) {
   return request({
