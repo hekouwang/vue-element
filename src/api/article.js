@@ -87,6 +87,22 @@ export function listWishAccount(data) {
   })
 }
 
+export function getAccountByIdOrParentId(data) {
+  return request({
+    url: '/account/getAccountByIdOrParentId',
+    method: 'post',
+    data
+  })
+}
+
+export function listAccountByGroup(data) {
+  return request({
+    url: '/account/listAccountByGroup',
+    method: 'post',
+    data
+  })
+}
+
 
 export function classifyList(data) {
   return request({
