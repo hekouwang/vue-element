@@ -185,6 +185,18 @@ export function listConsumeItemGroupAndOrderCake(data) {
   })
 }
 
+//分类统计支出(折线图)
+export function listConsumeItemBrokenLine(data) {
+  return request({
+    data,
+    url: '/cousumeItem/listConsumeItemBrokenLine',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/vue-element-admin/article/detail',

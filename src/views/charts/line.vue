@@ -35,7 +35,7 @@
       {{ $t('table.search') }}
     </el-button>
     <div style="margin-bottom: 10px"></div>
-    <chart height="100%" width="100%" :classify-list1="classifyList1" :money-list="moneyList"/>
+    <chart height="80%" width="80%" :classify-list1="classifyList1" :money-list="moneyList"/>
   </div>
 </template>
 
