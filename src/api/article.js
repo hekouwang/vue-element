@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+
+export function updateWish(data) {
+  return request({
+    url: '/wish/updateWish',
+    method: 'post',
+    data
+  })
+}
+
 export function addWish(data) {
   return request({
     url: '/wish/addWish',
@@ -98,6 +107,14 @@ export function getAccountByIdOrParentId(data) {
 export function listAccountByGroup(data) {
   return request({
     url: '/account/listAccountByGroup',
+    method: 'post',
+    data
+  })
+}
+
+export function listAccountByGroupSelect(data) {
+  return request({
+    url: '/account/listAccountByGroupSelect',
     method: 'post',
     data
   })

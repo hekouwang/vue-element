@@ -19,7 +19,7 @@
         clearable
         style="width: 90px"
         class="filter-item"
-      >-->
+      >
         <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
       </el-select>
       分类：
@@ -222,27 +222,20 @@
           />
         </el-form-item>
         <el-form-item label="源账户" prop="sourceAccount">
-          <el-select
+          <el-cascader
             v-model="temp.sourceAccount"
             placeholder="请选择源账户"
-            clearable
-            style="width: 200px"
-            class="filter-item"
-          >
-            <el-option v-for="item in accountList1" :key="item.accountName" :label="item.accountName" :value="item.id" />
-          </el-select>
+            :options="accountList1"
+            :props="{ expandTrigger: 'hover' }"
+          />
         </el-form-item>
         <el-form-item v-show="temp.consumeType==3" label="目标账户" prop="targetAccount">
-          <el-select
+          <el-cascader
             v-model="temp.targetAccount"
             placeholder="请选择目标账户"
-            clearable
-            style="width: 200px"
-            class="filter-item"
-          >
-
-            <el-option v-for="item in accountList1" :key="item.id" :label="item.accountName" :value="item.id" />
-          </el-select>
+            :options="accountList1"
+            :props="{ expandTrigger: 'hover' }"
+          />
         </el-form-item>
         <el-form-item label="金额" prop="money">
           <el-input v-model="temp.money" />
@@ -323,7 +316,14 @@ import {
   updateArticle,
   addOneExpand,
   tranferAccount,
-  addOneIncome, accountList, classifyList, relationList, classifyByGroup, merchantList, projectList
+  addOneIncome,
+  accountList,
+  classifyList,
+  relationList,
+  classifyByGroup,
+  merchantList,
+  projectList,
+  listAccountByGroupSelect
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -466,12 +466,12 @@ export default {
   },
   created() {
     this.getList()
-    this.getAccountList()
     this.getClassifyList()
     this.getRelationList()
     this.getMerchantList()
     this.getProjectList()
     this.listClassifyByGroup()
+    this.listAccountByGroupSelect()
     this.temp.consumeType = this.typeOptions[0]
   },
   methods: {
@@ -529,9 +529,9 @@ export default {
         }, 1.5 * 1000)
       })
     },
-    getAccountList() {
+    listAccountByGroupSelect() {
       this.listLoading = true
-      accountList(this.accountQuery).then(response1 => {
+      listAccountByGroupSelect(this.accountQuery).then(response1 => {
         this.accountList1 = response1.data
 
         // Just to simulate the time of the request
@@ -660,6 +660,10 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.temp.classifyId = this.temp.classifyId[1]
+          this.temp.sourceAccount = this.temp.sourceAccount[1]
+          if(null != this.temp.targetAccount){
+            this.temp.targetAccount = this.temp.targetAccount[1]
+          }
           if (this.temp.consumeType == 1) {
             addOneExpand(this.temp).then(() => {
               this.list.unshift(this.temp)
