@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function getTotalMoney(data) {
+  return request({
+    url: '/account/getTotalMoney',
+    method: 'get',
+  })
+}
+
 
 export function updateWish(data) {
   return request({

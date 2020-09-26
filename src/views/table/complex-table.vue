@@ -96,7 +96,8 @@
     <div class="app-container">
       <table>
         <tr>
-          <td><span style="font-size: 22px">日期</span>&nbsp;<span v-if="totalCount !=''">{{ totalCount.endTime }} </span>~ &nbsp;<span v-if="totalCount !=''">{{ totalCount.startTime }}</span></td>
+          <td><span style="font-size: 22px">日期</span>&nbsp;<span v-if="totalCount !=''">{{ totalCount.endTime }} </span>~ &nbsp;
+            <span v-if="totalCount !=''">{{ totalCount.startTime }}</span></td>
           <td />
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
           <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -221,20 +222,22 @@
             :props="{ expandTrigger: 'hover' }"
           />
         </el-form-item>
-        <el-form-item label="源账户" prop="sourceAccount">
+        <el-form-item label="源账户" prop="sourceAccount" >
           <el-cascader
             v-model="temp.sourceAccount"
             placeholder="请选择源账户"
             :options="accountList1"
             :props="{ expandTrigger: 'hover' }"
+            style="width: 300px"
           />
         </el-form-item>
-        <el-form-item v-show="temp.consumeType==3" label="目标账户" prop="targetAccount">
+        <el-form-item v-show="temp.consumeType==3" label="目标账户" prop="targetAccount" >
           <el-cascader
             v-model="temp.targetAccount"
             placeholder="请选择目标账户"
             :options="accountList1"
             :props="{ expandTrigger: 'hover' }"
+            style="width: 300px"
           />
         </el-form-item>
         <el-form-item label="金额" prop="money">
@@ -264,7 +267,7 @@
             v-model="temp.projectId"
             placeholder="请选择项目"
             clearable
-            style="width: 200px"
+            style="width: 400px"
             class="filter-item"
           >
             <el-option v-for="item in projectList1" :key="item.id" :label="item.projectName" :value="item.id" />
@@ -521,8 +524,6 @@ export default {
         if(this.total !=0){
           this.totalCount = response.data.totalCount
         }
-
-
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false

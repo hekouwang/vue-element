@@ -7,9 +7,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            资产
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val='totalIncome' :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -20,9 +20,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Messages
+            负债
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="totalExpense" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -33,40 +33,66 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Purchases
+            净资产
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="toalRemain" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-        <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            Shoppings
-          </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
+<!--    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">-->
+<!--      <div class="card-panel" @click="handleSetLineChartData('shoppings')">-->
+<!--        <div class="card-panel-icon-wrapper icon-shopping">-->
+<!--          <svg-icon icon-class="shopping" class-name="card-panel-icon" />-->
+<!--        </div>-->
+<!--        <div class="card-panel-description">-->
+<!--          <div class="card-panel-text">-->
+<!--            Shoppings-->
+<!--          </div>-->
+<!--          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </el-col>-->
   </el-row>
 </template>
 
 <script>
 import CountTo from 'vue-count-to'
+import {getTotalMoney} from "@/api/article";
+
 
 export default {
+  data() {
+    return {
+      moneyQuery: {},
+      totalIncome: 0,
+      totalExpense:0,
+      toalRemain:0
+    }
+  },
+  created() {
+    this.getTotalMoney1()
+  },
   components: {
     CountTo
   },
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
-    }
-  }
+    },
+    getTotalMoney1() {
+      this.listLoading = true
+      getTotalMoney(this.moneyQuery).then(response1 => {
+        this.totalIncome = response1.data.totalIncome
+        this.totalExpense = response1.data.totalExpense
+        this.toalRemain = response1.data.toalRemain
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    },
+
+  },
 }
 </script>
 

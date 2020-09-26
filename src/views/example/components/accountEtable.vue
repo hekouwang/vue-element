@@ -1,6 +1,10 @@
 <template>
   <div>
     <span style="font-size: 12px">余额:</span>&nbsp;<span style="color: red;font-size: 22px">{{ this.totalBalance }}</span>
+    <el-button v-show="this.reqAccount.parentAccountId===0" class="filter-item" style="background: #4165d7;color: #fff" type="primary"
+               @click="handleCreate">
+      {{ $t('新增') }}
+    </el-button>
     <div style="margin-top: 20px"></div>
     <el-table
       :data="tableData"
@@ -12,18 +16,18 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
         label="id"
+        prop="id"
         width="120">
       </el-table-column>
       <el-table-column
-        prop="accountName"
         label="名称"
+        prop="accountName"
         width="140">
       </el-table-column>
       <el-table-column
-        prop="balance"
         label="余额"
+        prop="balance"
         width="160">
       </el-table-column>
       <el-table-column
@@ -35,44 +39,55 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="createTime"
-        label="创建时间">
+        label="创建时间"
+        prop="createTime">
       </el-table-column>
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">转移</el-button>
-          <el-button type="text" size="small">编辑</el-button>
-          <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
-          <el-button @click="handleClick(scope.row)" type="text" size="small">禁用</el-button>
+          <el-button size="small" type="text" @click="handleClick(scope.row)">转移</el-button>
+          <el-button size="small" type="text">编辑</el-button>
+          <el-button size="small" type="text" @click="handleClick(scope.row)">删除</el-button>
+          <el-button size="small" type="text" @click="handleClick(scope.row)">禁用</el-button>
         </template>
       </el-table-column>
 
     </el-table>
 
     <div>
-      <el-dialog title="创建新分类" :visible.sync="dialogFormVisible" center>
+      <el-dialog :visible.sync="dialogFormVisible" title="创建新账户" >
         <el-form
           ref="dataForm"
+          :model="reqAccount"
           :rules="rules"
-          :model="reqClassify"
           label-position="left"
           label-width="80px"
           style="width: 400px; margin-left:50px;"
         >
-          <el-form-item label="分类名称" prop="accountName">
-            <el-input v-model="reqClassify.accountName"/>
+          <el-form-item label="账户名称" prop="accountName">
+            <el-input v-model="reqAccount.accountName"  style="width: 300px"/>
           </el-form-item>
-          <el-form-item label="父类名称" prop="parentId">
+          <el-form-item label="父类名称" prop="parentId" style="width: 300px">
             <el-select
-              v-model="reqClassify.parentId"
-              placeholder="请选择父类"
+              v-model="reqAccount.parentAccountId"
               clearable
-              style="width: 90px"
-              class="filter-item"
+              @change="handleChange()"
+              placeholder="请选择父类"
               required="true" show-message="请选择"
+              style="width: 150px"
             >
               <el-option v-for="item in typeOptions" :key="item.key" :label="item.label" :value="item.value"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="账户类型" prop="accountType" style="width: 300px">
+            <el-select
+              v-model="reqAccount.accountType"
+              clearable
+              placeholder="请选择类型"
+              required="true"
+              show-message="请选择" style="width: 150px"
+            >
+              <el-option v-for="item in accountType" :key="item.key" :label="item.label" :value="item.value"/>
             </el-select>
           </el-form-item>
 
@@ -109,17 +124,14 @@ export default {
         update: 'Edit',
         create: 'Create'
       },
-      reqClassify: {
-        parentId: '',
-        classifyName: ''
-      },
+      accountType:[],
       typeOptions: [{ label: '无', key: '0', value: 0 }],
       rules: {
-        classifyName: [
-          { required: true, message: '请输入分名称', trigger: 'blur' },
+        accountName: [
+          { required: true, message: '请输入账户名称', trigger: 'blur' },
           { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
         ],
-        parentId: [
+        parentAccountId: [
           { required: true, message: '请选择父类', trigger: 'change' }
         ]
       }
@@ -132,7 +144,7 @@ export default {
       this.reqAccount.id = data.id,
       this.reqAccount.parentAccountId = data.parentId
       this.totalBalance=data.totalBalance
-      if (0 === data.parentAccountId) {
+      if (0 === data.parentId) {
         let temp = {}
         temp.label = data.name,
           temp.key = data.id,
@@ -161,10 +173,27 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    handleChange() {
+      this.$forceUpdate()
+      // this.resetTemp()
+      if(this.reqAccount.parentAccountId===0){
+        let temp = {}
+        let temp1 = {}
+        temp.label = '普通账户',
+          temp.key = 1,
+          temp.value = 1
+        this.accountType.push(temp)
+        temp1.label = '负债账户',
+          temp1.key = 2,
+          temp1.value = 2
+        this.accountType.push(temp1)
+      }
+
+    },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          addClassify(this.reqClassify).then(() => {
+          addClassify(this.reqAccount).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',

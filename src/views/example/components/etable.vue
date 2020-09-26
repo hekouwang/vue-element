@@ -66,7 +66,7 @@
     </el-table>
 
     <div>
-      <el-dialog title="创建新分类" :visible.sync="dialogFormVisible" center>
+      <el-dialog title="创建新分类" :visible.sync="dialogFormVisible" >
         <el-form
           ref="dataForm"
           :rules="rules"
