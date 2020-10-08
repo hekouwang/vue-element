@@ -7,7 +7,7 @@
         <el-option v-for="item in statusList" :key="item.key" :label="item.label" :value="item.value"/>
       </el-select>
 
-      心愿名称：
+      权限名称：
       <el-input v-model="listQuery.name" style="width: 200px;" class="filter-item"/>
 
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
