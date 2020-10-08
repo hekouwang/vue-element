@@ -254,7 +254,7 @@ export const asyncRoutes = [
   // },
 
   {
-    path: '/error',
+    path: '/permission',
     component: Layout,
     redirect: 'noRedirect',
     name: '权限管理',
@@ -264,26 +264,26 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: '401',
-        component: () => import('@/views/error-page/401'),
+        path: 'userManage',
+        component: () => import('@/views/permission/userManage'),
         name: '用户管理',
         meta: { title: '用户管理', noCache: true }
       },
       {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
+        path: 'roleManage',
+        component: () => import('@/views/permission/roleManage'),
         name: '角色管理',
         meta: { title: '角色管理', noCache: true }
       },
       {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
+        path: 'permissionManage',
+        component: () => import('@/views/permission/permissionManage'),
         name: '权限管理',
         meta: { title: '权限管理', noCache: true }
       },
       {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
+        path: 'resourceManage',
+        component: () => import('@/views/permission/resourceManage'),
         name: '资源管理',
         meta: { title: '资源管理', noCache: true }
       }

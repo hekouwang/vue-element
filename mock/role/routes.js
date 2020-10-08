@@ -236,20 +236,20 @@ const asyncRoutes = [
         path: 'line',
         component: 'views/charts/line',
         name: 'LineChart',
-        meta: { title: 'lineChart', noCache: true }
+        meta: { title: 'lineChart'}
       },
       {
         path: 'keyboard',
         component: 'views/charts/keyboard',
         name: 'KeyboardChart',
-        meta: { title: 'keyboardChart', noCache: true }
+        meta: { title: 'keyboardChart'}
       },
 
       {
         path: 'mixchart',
         component: 'views/charts/mixChart',
         name: 'MixChart',
-        meta: { title: 'mixChart', noCache: true }
+        meta: { title: 'mixChart'}
       }
     ]
   },
