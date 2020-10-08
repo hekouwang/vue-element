@@ -369,9 +369,9 @@ const asyncRoutes = [
     path: '/error',
     component: 'layout/Layout',
     redirect: 'noRedirect',
-    name: 'ErrorPages',
+    name: '权限管理',
     meta: {
-      title: 'errorPages',
+      title: '权限管理',
       icon: '404'
     },
     children: [

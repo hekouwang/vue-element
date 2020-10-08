@@ -240,40 +240,52 @@ export const asyncRoutes = [
     ]
   },
 
-  {
-    path: '/tab',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/tab/index'),
-        name: 'Tab',
-        meta: { title: 'tab', icon: 'tab' }
-      }
-    ]
-  },
+  // {
+  //   path: '/tab',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/tab/index'),
+  //       name: 'Tab',
+  //       meta: { title: 'tab', icon: 'tab' }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/error',
     component: Layout,
     redirect: 'noRedirect',
-    name: 'ErrorPages',
+    name: '权限管理',
     meta: {
-      title: 'errorPages',
+      title: '权限管理',
       icon: '404'
     },
     children: [
       {
         path: '401',
         component: () => import('@/views/error-page/401'),
-        name: 'Page401',
-        meta: { title: 'page401', noCache: true }
+        name: '用户管理',
+        meta: { title: '用户管理', noCache: true }
       },
       {
         path: '404',
         component: () => import('@/views/error-page/404'),
-        name: 'Page404',
-        meta: { title: 'page404', noCache: true }
+        name: '角色管理',
+        meta: { title: '角色管理', noCache: true }
+      },
+      {
+        path: '404',
+        component: () => import('@/views/error-page/404'),
+        name: '权限管理',
+        meta: { title: '权限管理', noCache: true }
+      },
+      {
+        path: '404',
+        component: () => import('@/views/error-page/404'),
+        name: '资源管理',
+        meta: { title: '资源管理', noCache: true }
       }
     ]
   },

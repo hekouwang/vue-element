@@ -64,9 +64,9 @@
           <span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>
         </div>
 
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          {{ $t('login.thirdparty') }}
-        </el-button>
+<!--        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">-->
+<!--          {{ $t('login.thirdparty') }}-->
+<!--        </el-button>-->
       </div>
     </el-form>
 
@@ -97,8 +97,8 @@ export default {
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+      if (value.length < 3) {
+        callback(new Error('The password can not be less than 3 digits'))
       } else {
         callback()
       }
@@ -161,7 +161,6 @@ export default {
       })
     },
     handleLogin() {
-      debugger
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true

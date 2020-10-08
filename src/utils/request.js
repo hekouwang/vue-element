@@ -11,25 +11,37 @@ const service = axios.create({
   timeout: 5000 // request timeout
 })
 
-// request interceptor
-service.interceptors.request.use(
-  config => {
-    // do something before request is sent
-
-    if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
-    }
-    return config
-  },
-  error => {
-    // do something with request error
-    console.log(error) // for debug
-    return Promise.reject(error)
+// request拦截器
+service.interceptors.request.use(config => {
+  if (store.getters.token) {
+    config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
-)
+  return config
+}, error => {
+  // Do something with request error
+  console.log(error) // for debug
+  Promise.reject(error)
+})
+
+// // request interceptor
+// service.interceptors.request.use(
+//   config => {
+//     // do something before request is sent
+//
+//     if (store.getters.token) {
+//       // let each request carry token
+//       // ['X-Token'] is a custom headers key
+//       // please modify it according to the actual situation
+//       config.headers['X-Token'] = getToken()
+//     }
+//     return config
+//   },
+//   error => {
+//     // do something with request error
+//     console.log(error) // for debug
+//     return Promise.reject(error)
+//   }
+// )
 
 // response interceptor
 service.interceptors.response.use(
